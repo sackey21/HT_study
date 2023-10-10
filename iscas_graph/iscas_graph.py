@@ -29,7 +29,7 @@ def main(path):
         # wire
         elif 'wire ' in inst:
             inst_wire.append(inst)
-            
+    
         
 
 if __name__ == '__main__':
