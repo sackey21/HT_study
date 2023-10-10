@@ -18,8 +18,6 @@ def main(path):
     inst_output = []
     # wire宣言命令のリスト
     inst_wire = []
-    # ゲート宣言命令のリスト
-    inst_gate = []
 
     for inst in inst_list:
         # input
@@ -31,7 +29,7 @@ def main(path):
         # wire
         elif 'wire ' in inst:
             inst_wire.append(inst)
-        else:
+            
         
 
 if __name__ == '__main__':
