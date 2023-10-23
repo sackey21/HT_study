@@ -2,6 +2,7 @@ from typing import List
 import sys
 import pathlib
 import re
+import networkx as nx # 直置きpython3に直インストールしてます
 
 from Gate import Gate
 
@@ -38,7 +39,10 @@ def main(path):
         elif re.compile("and |nand |or |nor |xor |xnor |buf |not ").match(inst):
             inst_primitive_gate.append(inst)
     
+    # グラフで代替可能なのでこれいらんかもしれへん。
     circuit_gates : List[Gate()] = []
+     # グラフ作成
+    circuit_graph = nx.Graph()
 
     # 命令から必要情報の抽出
     for inst in inst_primitive_gate:
@@ -57,14 +61,18 @@ def main(path):
         
         # ゲートの登録
         circuit_gates.append(Gate(gate_name, gate_type, output, input))
+        circuit_graph.add_node(gate_name, type = gate_type, input = input, output = output)
     
     for a in circuit_gates:
         print(vars(a))
         
 
-    # グラフ作成
-    # circuit_graph = nx.Graph()
+    # エッジについての実装
+    # ゲートとゲートの接続関係をエッジとして追加
+    # エッジの追加方策：ワイヤのリストをループで回して、inputでそのワイヤを持ってるゲートとoutputでそのワイヤを持ってるゲートを検出して、エッジを追加する。
     
+    
+    # エッジに遷移確率を重みとして追加
 
 
 if __name__ == '__main__':
