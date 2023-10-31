@@ -62,6 +62,8 @@ def main(path):
         circuit_graph.add_node(gate_name, type=gate_type,
                                input=input, output=output)
 
+    print(circuit_graph.nodes)
+
     # ワイヤの抽出
     wires: List[str] = []
     for inst in insts_wire:
@@ -70,24 +72,29 @@ def main(path):
 
     # print(wires)
 
-    # エッジについての実装
-    # ゲートとゲートの接続関係をエッジとして追加
-    # エッジの追加方策：ワイヤのリストをループで回して、inputでそのワイヤを持ってるゲートとoutputでそのワイヤを持ってるゲートを検出して、エッジを追加する。
-    # エッジに遷移確率を重みとして追加
-    print(dict(nx.get_node_attributes(circuit_graph, 'input')))
+    # エッジ追加
     for wire in wires:
+        print(wire)
         input_gate: List[str] = [i for i, value in dict(
             nx.get_node_attributes(circuit_graph, 'input')).items() if wire in value]
         output_gate: List[str] = [i for i, value in dict(
             nx.get_node_attributes(circuit_graph, 'output')).items() if wire in value]
         for input in input_gate:
             for output in output_gate:
-                circuit_graph.add_edges_from([(input, output)], label=wire)
-    print(circuit_graph.edges)
+                circuit_graph.add_edge(input, output, label=wire)
 
-    # ネットワーク図描写
-    nx.draw_networkx(circuit_graph)
+    # エッジのラベルを取得
+    edge_labels = {edge: circuit_graph[edge[0]][edge[1]]
+                   ["label"] for edge in circuit_graph.edges()}
+    print(edge_labels)
+
+    # ネットワーク図出力# ネットワーク図の描画
+    pos = nx.spring_layout(circuit_graph)
+    nx.draw(circuit_graph, pos, with_labels=True, node_size=500, node_color="skyblue", font_size=10, font_color="black")
+    nx.draw_networkx_edge_labels(circuit_graph, pos, edge_labels=edge_labels, font_color="red")
+
     plt.savefig('test')
+
 
 if __name__ == '__main__':
     args = sys.argv
