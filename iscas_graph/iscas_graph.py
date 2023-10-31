@@ -3,8 +3,6 @@ import sys
 import pathlib
 import re
 import networkx as nx  # 直置きpython3に直インストールしてます
-
-
 import matplotlib.pyplot as plt
 
 from Gate import Gate
@@ -43,8 +41,6 @@ def main(path):
         elif re.compile("and |nand |or |nor |xor |xnor |buf |not ").match(inst):
             insts_primitive_gate.append(inst)
 
-    # グラフで代替可能なのでこれいらんかもしれへん。
-    circuit_gates: List[Gate()] = []  # グラフ作成
     circuit_graph = nx.Graph()
 
     # 命令から必要情報の抽出
@@ -63,7 +59,6 @@ def main(path):
         input = gate_connect_info
 
         # ゲートの登録
-        circuit_gates.append(Gate(gate_name, gate_type, output, input))
         circuit_graph.add_node(gate_name, type=gate_type,
                                input=input, output=output)
 
@@ -88,7 +83,7 @@ def main(path):
         for input in input_gate:
             for output in output_gate:
                 circuit_graph.add_edges_from([(input, output)], label=wire)
-    print(circuit_graph)
+    print(circuit_graph.edges)
 
     # ネットワーク図描写
     nx.draw_networkx(circuit_graph)
