@@ -10,7 +10,7 @@ from Gate import Gate
 
 def main(path):
 
-    circuit_graph = nx.Graph()
+    circuit_graph = nx.DiGraph()
 
     f = open(path, 'r', encoding='UTF-8')
     data = f.read()
