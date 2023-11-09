@@ -125,6 +125,7 @@ def main(path):
         circuit_graph, pos, edge_labels=edge_labels, font_color="red")
 
     plt.savefig('test')
+    
 
 
 if __name__ == '__main__':
