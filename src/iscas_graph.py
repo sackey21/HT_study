@@ -12,7 +12,7 @@ def main(path):
 
     circuit_graph = nx.DiGraph()
 
-    path = load_file(path)
+    data = load_file(path)
 
     # データ整形
     insts_list = re.sub('//.*\n', '', data).replace('\n', '').split(';')
