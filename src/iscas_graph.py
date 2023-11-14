@@ -10,7 +10,7 @@ from Gate import Gate
 
 def main(path):
 
-    circuit_graph = nx.DiGraph()
+    circuit_graph = nx.Graph()
 
     data = load_file(path)
 
@@ -79,7 +79,7 @@ def main(path):
         circuit_graph.add_node(primary_input)
         for input in [i for i, value in dict(
                 nx.get_node_attributes(circuit_graph, 'input')).items() if wire in value]:
-            circuit_graph.add_edge(primary_input, input, label=wire)
+            circuit_graph.add_edge(primary_input, input, label=wire, weight=1)
 
     # 外へ出力する信号線を表すエッジとノードの設定、出力元ゲートと接続
     output_num: int = 0
@@ -89,7 +89,8 @@ def main(path):
         circuit_graph.add_node(primary_output)
         for output in [i for i, value in dict(
                 nx.get_node_attributes(circuit_graph, 'output')).items() if wire in value]:
-            circuit_graph.add_edge(primary_output, output, label=wire)
+            circuit_graph.add_edge(
+                primary_output, output, label=wire, weight=1)
 
     # ワイヤの抽出
     wires: List[str] = []
@@ -106,7 +107,10 @@ def main(path):
             nx.get_node_attributes(circuit_graph, 'output')).items() if wire in value]
         for input in input_gate:
             for output in output_gate:
-                circuit_graph.add_edge(input, output, label=wire)
+                circuit_graph.add_edge(input, output, label=wire, weight=1)
+
+    # アルゴリズム実行
+    minimum_spanning_tree(circuit_graph)
 
     draw_network(circuit_graph)
 
@@ -119,7 +123,6 @@ def load_file(path):
 
 
 def draw_network(circuit_graph):
-    # グラフ描写部。
     # エッジのラベルを取得
     edge_labels = {edge: circuit_graph[edge[0]][edge[1]]
                    ["label"] for edge in circuit_graph.edges()}
@@ -134,6 +137,15 @@ def draw_network(circuit_graph):
 
     plt.savefig('test')
 
+
+def minimum_spanning_tree(G):
+    print('size of G:', G.size(weight='weight'))
+    T = nx.minimum_spanning_tree(G)
+
+    print('size of MST:', T.size(weight='weight'))
+    print('spanning edges:')
+    for i in sorted(T.edges(data=True)):
+        print(i)
 
 if __name__ == '__main__':
     args = sys.argv
