@@ -121,19 +121,19 @@ def load_file(path):
     f.close()
     return data
 
-
-def draw_network(circuit_graph):
+def draw_network(G):
+    # グラフ描写部。
     # エッジのラベルを取得
-    edge_labels = {edge: circuit_graph[edge[0]][edge[1]]
-                   ["label"] for edge in circuit_graph.edges()}
+    edge_labels = {edge: G[edge[0]][edge[1]]
+                   ["label"] for edge in G.edges()}
     print(edge_labels)
 
     # ネットワーク図出力
-    pos = nx.spring_layout(circuit_graph)
-    nx.draw(circuit_graph, pos, with_labels=True, node_size=500,
+    pos = nx.spring_layout(G)
+    nx.draw(G, pos, with_labels=True, node_size=500,
             node_color="skyblue", font_size=10, font_color="black")
     nx.draw_networkx_edge_labels(
-        circuit_graph, pos, edge_labels=edge_labels, font_color="red")
+        G, pos, edge_labels=edge_labels, font_color="red")
 
     plt.savefig('test')
 
