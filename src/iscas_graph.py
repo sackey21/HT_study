@@ -12,10 +12,7 @@ def main(path):
 
     circuit_graph = nx.DiGraph()
 
-    f = open(path, 'r', encoding='UTF-8')
-    data = f.read()
-
-    f.close()
+    path = load_file(path)
 
     # データ整形
     insts_list = re.sub('//.*\n', '', data).replace('\n', '').split(';')
@@ -111,6 +108,17 @@ def main(path):
             for output in output_gate:
                 circuit_graph.add_edge(input, output, label=wire)
 
+    draw_network(circuit_graph)
+
+
+def load_file(path):
+    f = open(path, 'r', encoding='UTF-8')
+    data = f.read()
+    f.close()
+    return data
+
+
+def draw_network(circuit_graph):
     # グラフ描写部。
     # エッジのラベルを取得
     edge_labels = {edge: circuit_graph[edge[0]][edge[1]]
@@ -125,7 +133,6 @@ def main(path):
         circuit_graph, pos, edge_labels=edge_labels, font_color="red")
 
     plt.savefig('test')
-    
 
 
 if __name__ == '__main__':
