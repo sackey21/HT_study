@@ -100,7 +100,6 @@ def main(path):
 
     # ワイヤをエッジとして追加
     for wire in wires:
-        print(wire)
         input_gate: List[str] = [i for i, value in dict(
             nx.get_node_attributes(circuit_graph, 'input')).items() if wire in value]
         output_gate: List[str] = [i for i, value in dict(
@@ -111,6 +110,7 @@ def main(path):
 
     # アルゴリズム実行
     minimum_spanning_tree(circuit_graph)
+    dijkstras(circuit_graph, "input5", "output1")
 
     draw_network(circuit_graph)
 
@@ -120,6 +120,7 @@ def load_file(path):
     data = f.read()
     f.close()
     return data
+
 
 def draw_network(G):
     # グラフ描写部。
@@ -146,6 +147,18 @@ def minimum_spanning_tree(G):
     print('spanning edges:')
     for i in sorted(T.edges(data=True)):
         print(i)
+
+# ダイクストラ法
+
+
+def dijkstras(G, start, goal):
+    DG = nx.Graph(G)
+    shortest_path = nx.dijkstra_path(DG, start, goal)
+    shortest_path_weight = nx.dijkstra_path_length(DG, start, goal)
+
+    print("Shortest Path:", shortest_path)
+    print("Weight:", shortest_path_weight)
+
 
 if __name__ == '__main__':
     args = sys.argv
