@@ -2,18 +2,50 @@ from typing import List
 import sys
 import pathlib
 import re
-import networkx as nx  # 直置きpython3に直インストールしてます
+import networkx as nx  # python3に直インストールしてます
 import matplotlib.pyplot as plt
-
+import pandas as pd
 from Gate import Gate
 
 
 def main(path):
-
-    circuit_graph = nx.Graph()
-
     data = load_file(path)
 
+    circuit_graph = create_graph(data)
+    circuit_di_graph = create_graph(data, nx.DiGraph())
+
+    # アルゴリズム実行
+    # minimum_spanning_tree(circuit_graph)
+    # dijkstras(circuit_graph, "input5", "output1")
+
+    draw_network(circuit_graph, './result/result3')
+    draw_network(circuit_di_graph, './result/result4')
+
+def load_file(path):
+    f = open(path, 'r', encoding='UTF-8')
+    data = f.read()
+    f.close()
+    return data
+
+def draw_network(G, output_file: str):
+    # グラフ描写部。
+    # エッジのラベルを取得
+    edge_labels = {edge: G[edge[0]][edge[1]]
+                   ["label"] for edge in G.edges()}
+    print(edge_labels)
+
+    # ネットワーク図出力
+    pos = nx.spring_layout(G)
+    nx.draw(G, pos, with_labels=True, node_size=500,
+            node_color="skyblue", font_size=10, font_color="black")
+    nx.draw_networkx_edge_labels(
+        G, pos, edge_labels=edge_labels, font_color="red")
+
+    plt.savefig(output_file)
+
+# グラフの作成
+def create_graph(data, circuit_graph = nx.Graph()) -> nx.Graph:
+    
     # データ整形
     insts_list = re.sub('//.*\n', '', data).replace('\n', '').split(';')
 
@@ -107,38 +139,10 @@ def main(path):
         for input in input_gate:
             for output in output_gate:
                 circuit_graph.add_edge(input, output, label=wire, weight=1)
+    
+    return circuit_graph
 
-    # アルゴリズム実行
-    minimum_spanning_tree(circuit_graph)
-    dijkstras(circuit_graph, "input5", "output1")
-
-    draw_network(circuit_graph)
-
-
-def load_file(path):
-    f = open(path, 'r', encoding='UTF-8')
-    data = f.read()
-    f.close()
-    return data
-
-
-def draw_network(G):
-    # グラフ描写部。
-    # エッジのラベルを取得
-    edge_labels = {edge: G[edge[0]][edge[1]]
-                   ["label"] for edge in G.edges()}
-    print(edge_labels)
-
-    # ネットワーク図出力
-    pos = nx.spring_layout(G)
-    nx.draw(G, pos, with_labels=True, node_size=500,
-            node_color="skyblue", font_size=10, font_color="black")
-    nx.draw_networkx_edge_labels(
-        G, pos, edge_labels=edge_labels, font_color="red")
-
-    plt.savefig('test')
-
-
+# 最少全域木
 def minimum_spanning_tree(G):
     print('size of G:', G.size(weight='weight'))
     T = nx.minimum_spanning_tree(G)
@@ -149,8 +153,6 @@ def minimum_spanning_tree(G):
         print(i)
 
 # ダイクストラ法
-
-
 def dijkstras(G, start, goal):
     DG = nx.Graph(G)
     shortest_path = nx.dijkstra_path(DG, start, goal)
