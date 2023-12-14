@@ -17,6 +17,7 @@ class NetworkCentrality:
 
     def calc_degree_centrality(self):
         pass
+
     def calc_eigenvector_centrality(self):
         pass
 
