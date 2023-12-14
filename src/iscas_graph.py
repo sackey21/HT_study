@@ -6,8 +6,10 @@ import networkx as nx  # python3に直インストールしてます
 import matplotlib.pyplot as plt
 import pandas as pd
 from Gate import Gate
+from network_centrality.calc_centrality import calc_centrality
 
 
+# メイン
 def main(path):
     data = load_file(path)
 
@@ -18,8 +20,11 @@ def main(path):
     # minimum_spanning_tree(circuit_graph)
     # dijkstras(circuit_graph, "input5", "output1")
 
-    draw_network(circuit_graph, './result/result3')
-    draw_network(circuit_di_graph, './result/result4')
+    calc_centrality.calc_group_centrality(circuit_di_graph, circuit_graph)
+ 
+    # draw_network(circuit_graph, './result/result3')
+    # draw_network(circuit_di_graph, './result/result4')
+
 
 def load_file(path):
     f = open(path, 'r', encoding='UTF-8')
