@@ -18,3 +18,6 @@ https://openit.kek.jp/training/2019/fpga/introduction-to-veriloghdl.pdf
 # 2023/11/09
 今後やること
 - アルゴリズム実行(いじるのむずいくらいのダルコードなので必要なところrefactoring)
+
+# 2023/12/19
+graph-tools諦めました
