@@ -13,15 +13,15 @@ from network_centrality.calc_centrality import calc_centrality
 def main(path):
     data = load_file(path)
 
-    circuit_graph = create_graph(data)
-    circuit_di_graph = create_graph(data, nx.DiGraph())
+    circuit_graph: nx.Graph = create_graph(data)
+    circuit_di_graph: nx.DiGraph = create_graph(data, nx.DiGraph())
 
     # アルゴリズム実行
     # minimum_spanning_tree(circuit_graph)
     # dijkstras(circuit_graph, "input5", "output1")
 
     calc_centrality.calc_group_centrality(circuit_di_graph, circuit_graph)
- 
+
     # draw_network(circuit_graph, './result/result3')
     # draw_network(circuit_di_graph, './result/result4')
 
@@ -31,6 +31,7 @@ def load_file(path):
     data = f.read()
     f.close()
     return data
+
 
 def draw_network(G, output_file: str):
     # グラフ描写部。
@@ -49,8 +50,9 @@ def draw_network(G, output_file: str):
     plt.savefig(output_file)
 
 # グラフの作成
-def create_graph(data, circuit_graph = nx.Graph()) -> nx.Graph:
-    
+
+
+def create_graph(data, circuit_graph=nx.Graph()) -> nx.Graph:
     # データ整形
     insts_list = re.sub('//.*\n', '', data).replace('\n', '').split(';')
 
@@ -144,10 +146,12 @@ def create_graph(data, circuit_graph = nx.Graph()) -> nx.Graph:
         for input in input_gate:
             for output in output_gate:
                 circuit_graph.add_edge(input, output, label=wire, weight=1)
-    
+
     return circuit_graph
 
 # 最少全域木
+
+
 def minimum_spanning_tree(G):
     print('size of G:', G.size(weight='weight'))
     T = nx.minimum_spanning_tree(G)
@@ -158,6 +162,8 @@ def minimum_spanning_tree(G):
         print(i)
 
 # ダイクストラ法
+
+
 def dijkstras(G, start, goal):
     DG = nx.Graph(G)
     shortest_path = nx.dijkstra_path(DG, start, goal)
