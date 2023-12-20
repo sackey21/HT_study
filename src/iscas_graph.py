@@ -22,8 +22,8 @@ def main(path):
 
     calc_centrality.calc_group_centrality(circuit_di_graph, circuit_graph)
 
-    # draw_network(circuit_graph, './result/result3')
-    # draw_network(circuit_di_graph, './result/result4')
+    draw_network(circuit_graph, './../result/result3')
+    draw_network(circuit_di_graph, './../result/result4')
 
 
 def load_file(path):
