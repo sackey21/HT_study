@@ -128,6 +128,7 @@ class MakeNetwork:
         insts_function: List[str] = []
         insts_always: List[str] = []
         insts_module: List[str] = []
+        insts_under_module: List[str] = []
         for i in insts_list:
             # always文の配列化
             if 'always' in i:
@@ -170,22 +171,24 @@ class MakeNetwork:
             if 'always' in i:
                 insts_function.append(i)
                 continue
-            print(i)
 
-            print(re.findall('[a-zA-Z_]+ *[a-zA-Z_]+[ ]*\( *', i))
-            print(re.findall('\.[a-zA-Z_]+\([a-zA-Z_]+\),?', i))
-            print(re.findall('\);', i))
-            if i in '[a-zA-Z_]+ [a-zA-Z_]+ +\(' and '\.[a-zA-Z_]+\([a-zA-Z_]+\),?' and '\);':
-                print(i)
-
+            if (re.findall('[a-zA-Z_]+ *[a-zA-Z_]+ *\( *', i) and re.findall('\.[a-zA-Z_]+\([a-zA-Z_]+\),?', i) and re.findall('\);', i)):
+                insts_under_module.append(i)
+        
         # input命令の配列化
-        # 入力変数をキーにして，ビット幅を値として持たせる
-        # ビット数はワイヤの重みに追加
-        # bit数は良い感じに考慮する？使うとしたら重み
-        # regとwireのやり方は考える
-        # 使用してるモジュールには入出力の接続関係を把握させる
-        # always文の中身はとりあえずスルーで
-
+        # inputをエッジに設定
+        
+        # outputを配列化
+        # outputをエッジに設定
+        
+        # wireを配列化
+        # wireをエッジに設定
+        
+        # regを配列化
+        # regをエッジに設定
+        
+        # 下位モジュールをノード化
+        # inputとかoutputをどうするか決める
 
 if __name__ == '__main__':
     args = sys.argv
