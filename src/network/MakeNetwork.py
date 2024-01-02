@@ -176,20 +176,48 @@ class MakeNetwork:
                 insts_under_module.append(i)
         
         # input命令の配列化
+        print(insts_input)
+        primary_input_wire: List[str] = []
+        for inst in insts_input:
+            for input_wire in inst.replace('input', '').replace(' ', '').replace('\t', '').replace(';', '').split(','):
+                primary_input_wire.append(input_wire)
+                # bit数の指定どうしようかな
+        print(primary_input_wire)
         # inputをエッジに設定
-        
-        # outputを配列化
+
+        # 出力信号線抽出
+        primary_output_wire: List[str] = []
+        for inst in insts_output:
+            for output_wire in inst.replace('output', '').replace(' ', '').replace('\t', '').replace(';', '').split(','):
+                primary_output_wire.append(output_wire)
+                # bitどうしようかな
+        print(primary_output_wire)
         # outputをエッジに設定
         
-        # wireを配列化
         # wireをエッジに設定
+        connecting_wire: List[str] = []
+        for inst in insts_wire:
+            for wire in inst.replace('wire', '').replace(' ', '').replace('\t', '').replace(';', '').split(','):
+                connecting_wire.append(wire)
+                # bitどうしようかな
+        print(connecting_wire)
         
         # regを配列化
+        connecting_reg: List[str] = []
+        for inst in insts_reg:
+            for reg in inst.replace('reg', '').replace(' ', '').replace('\t', '').replace(';', '').split(','):
+                connecting_reg.append(reg)
+                # bitどうしようかな
+        print(connecting_reg)
         # regをエッジに設定
         
         # 下位モジュールをノード化
-        # inputとかoutputをどうするか決める
-
+        # inputとして使えるところをリストで管理
+        # regとwireもinputに追加しとこう
+        # input配列にないところをoutputとして扱う
+        # ゲートの宣言における前後関係はちょっとどうしようかなといった感じ
+        # 宣言してるモジュールの同階層内にモジュール.vのファイルがあるか探索してopen，その中でinputとoutputを判定
+        # ゲートでそれを使ってみる
 if __name__ == '__main__':
     args = sys.argv
     f = open(args[1], 'r', encoding='UTF-8')
